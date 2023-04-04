@@ -1,0 +1,8 @@
+---
+apiVersion: "v2"
+name: "azure-workload-identity"
+version: "0"
+dependencies:
+  - name: "workload-identity-webhook"
+    version: "^1"
+    repository: "https://azure.github.io/azure-workload-identity/charts"
