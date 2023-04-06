@@ -58,7 +58,7 @@ This module must be one of the first ones to be deployed and consequently it nee
 
 The following requirements are needed by this module:
 
-- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 4)
+- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 4, < 5.0.0)
 
 - [[requirement_utils]] <<requirement_utils,utils>> (>= 1)
 
@@ -66,7 +66,9 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_argocd]] <<provider_argocd,argocd>> (>= 4)
+- [[provider_argocd]] <<provider_argocd,argocd>> (>= 4, < 5.0.0)
+
+- [[provider_azurerm]] <<provider_azurerm,azurerm>>
 
 - [[provider_null]] <<provider_null,null>>
 
@@ -78,8 +80,12 @@ The following resources are used by this module:
 
 - https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application[argocd_application.this] (resource)
 - https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project[argocd_project.this] (resource)
+- https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential[azurerm_federated_identity_credential.this] (resource)
+- https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity[azurerm_user_assigned_identity.this] (resource)
 - https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.dependencies] (resource)
 - https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.this] (resource)
+- https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group[azurerm_resource_group.this] (data source)
+- https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription[azurerm_subscription.primary] (data source)
 - https://registry.terraform.io/providers/cloudposse/utils/latest/docs/data-sources/deep_merge_yaml[utils_deep_merge_yaml.values] (data source)
 
 === Required Inputs
@@ -89,6 +95,30 @@ The following input variables are required:
 ==== [[input_argocd_namespace]] <<input_argocd_namespace,argocd_namespace>>
 
 Description: Namespace used by Argo CD where the Application and AppProject resources should be created.
+
+Type: `string`
+
+==== [[input_base_domain]] <<input_base_domain,base_domain>>
+
+Description: n/a
+
+Type: `string`
+
+==== [[input_cluster_name]] <<input_cluster_name,cluster_name>>
+
+Description: Name given to the cluster. Value used for naming some the resources created by the module.
+
+Type: `string`
+
+==== [[input_cluster_oidc_issuer_url]] <<input_cluster_oidc_issuer_url,cluster_oidc_issuer_url>>
+
+Description: Cluster OIDC issuer url.
+
+Type: `string`
+
+==== [[input_node_resource_group_name]] <<input_node_resource_group_name,node_resource_group_name>>
+
+Description: The Resource Group of the node pools. It will be used for new Managed Identities.
 
 Type: `string`
 
@@ -120,14 +150,6 @@ Default:
 }
 ----
 
-==== [[input_cluster_name]] <<input_cluster_name,cluster_name>>
-
-Description: Name given to the cluster. Value used for naming some the resources created by the module.
-
-Type: `string`
-
-Default: `"cluster"`
-
 ==== [[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
 
 Description: IDs of the other modules on which this module depends on.
@@ -144,17 +166,44 @@ Type: `any`
 
 Default: `[]`
 
+==== [[input_namespace]] <<input_namespace,namespace>>
+
+Description: n/a
+
+Type: `string`
+
+Default: `"workload-identity"`
+
 ==== [[input_target_revision]] <<input_target_revision,target_revision>>
 
 Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v1.0.0"`
+Default: `"v0.1.0"`
+
+==== [[input_workload_identities]] <<input_workload_identities,workload_identities>>
+
+Description: Azure User Assigned Identities to create.
+
+Type:
+[source,hcl]
+----
+list(object({
+    namespace = string
+    name      = string
+  }))
+----
+
+Default: `[]`
 
 === Outputs
 
 The following outputs are exported:
+
+==== [[output_helm_values]] <<output_helm_values,helm_values>>
+
+Description: Helm values applied to the module's chart
 
 ==== [[output_id]] <<output_id,id>>
 
@@ -172,7 +221,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 4
+|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 4, < 5.0.0
 |[[requirement_utils]] <<requirement_utils,utils>> |>= 1
 |===
 
@@ -181,7 +230,8 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[provider_argocd]] <<provider_argocd,argocd>> |>= 4
+|[[provider_argocd]] <<provider_argocd,argocd>> |>= 4, < 5.0.0
+|[[provider_azurerm]] <<provider_azurerm,azurerm>> |n/a
 |[[provider_null]] <<provider_null,null>> |n/a
 |[[provider_utils]] <<provider_utils,utils>> |>= 1
 |===
@@ -193,8 +243,12 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |Name |Type
 |https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application[argocd_application.this] |resource
 |https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project[argocd_project.this] |resource
+|https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential[azurerm_federated_identity_credential.this] |resource
+|https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity[azurerm_user_assigned_identity.this] |resource
 |https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.dependencies] |resource
 |https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource[null_resource.this] |resource
+|https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group[azurerm_resource_group.this] |data source
+|https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription[azurerm_subscription.primary] |data source
 |https://registry.terraform.io/providers/cloudposse/utils/latest/docs/data-sources/deep_merge_yaml[utils_deep_merge_yaml.values] |data source
 |===
 
@@ -235,11 +289,23 @@ object({
 |n/a
 |yes
 
+|[[input_base_domain]] <<input_base_domain,base_domain>>
+|n/a
+|`string`
+|n/a
+|yes
+
 |[[input_cluster_name]] <<input_cluster_name,cluster_name>>
 |Name given to the cluster. Value used for naming some the resources created by the module.
 |`string`
-|`"cluster"`
-|no
+|n/a
+|yes
+
+|[[input_cluster_oidc_issuer_url]] <<input_cluster_oidc_issuer_url,cluster_oidc_issuer_url>>
+|Cluster OIDC issuer url.
+|`string`
+|n/a
+|yes
 
 |[[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
 |IDs of the other modules on which this module depends on.
@@ -253,10 +319,37 @@ object({
 |`[]`
 |no
 
+|[[input_namespace]] <<input_namespace,namespace>>
+|n/a
+|`string`
+|`"workload-identity"`
+|no
+
+|[[input_node_resource_group_name]] <<input_node_resource_group_name,node_resource_group_name>>
+|The Resource Group of the node pools. It will be used for new Managed Identities.
+|`string`
+|n/a
+|yes
+
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v1.0.0"`
+|`"v0.1.0"`
+|no
+
+|[[input_workload_identities]] <<input_workload_identities,workload_identities>>
+|Azure User Assigned Identities to create.
+|
+
+[source]
+----
+list(object({
+    namespace = string
+    name      = string
+  }))
+----
+
+|`[]`
 |no
 
 |===
@@ -266,6 +359,7 @@ object({
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Description
+|[[output_helm_values]] <<output_helm_values,helm_values>> |Helm values applied to the module's chart
 |[[output_id]] <<output_id,id>> |ID to pass other modules in order to refer to this module as a dependency.
 |===
 // END_TF_TABLES

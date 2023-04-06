@@ -1,0 +1,6 @@
+---
+apiVersion: "v2"
+name: "workload-identity"
+version: "0.1.0"
+description: |
+  This chart enables assigning Azure Active Directory Identities to Kubernetes applications.

@@ -1,0 +1,8 @@
+workload-identity:
+  workloadIdentities: []
+    # - name: "test"
+    #   namespace: "test"
+    #   clientId: "1"
+    # - name: "test2"
+    #   namespace: "test2"
+    #   clientId: "2"
