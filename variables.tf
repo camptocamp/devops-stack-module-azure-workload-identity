@@ -50,5 +50,12 @@ variable "dependency_ids" {
 #######################
 
 variable "azure_tenant_id" {
-  type = string
+  description = "Azure tenant ID to configure workload identity webhook."
+  type        = string
+}
+
+variable "metrics_enabled" {
+  description = "Flag to deploy a podMonitor resource."
+  type        = bool
+  default     = false
 }

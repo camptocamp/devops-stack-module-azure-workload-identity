@@ -1,3 +1,4 @@
+{{- with .Values.metricsEnabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -8,3 +9,4 @@ spec:
       azure-workload-identity.io/system: "true"
   podMetricsEndpoints:
   - port: metrics
+{{- end }}
