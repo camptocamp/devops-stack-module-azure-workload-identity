@@ -62,6 +62,12 @@ Description: Namespace used by Argo CD where the Application and AppProject reso
 
 Type: `string`
 
+==== [[input_azure_tenant_id]] <<input_azure_tenant_id,azure_tenant_id>>
+
+Description: Azure tenant ID to configure workload identity webhook.
+
+Type: `string`
+
 === Optional Inputs
 
 The following input variables are optional (have default values):
@@ -90,14 +96,6 @@ Default:
 }
 ----
 
-==== [[input_cluster_name]] <<input_cluster_name,cluster_name>>
-
-Description: Name given to the cluster. Value used for naming some the resources created by the module.
-
-Type: `string`
-
-Default: `"cluster"`
-
 ==== [[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
 
 Description: IDs of the other modules on which this module depends on.
@@ -113,6 +111,22 @@ Description: Helm chart value overrides. They should be passed as a list of HCL 
 Type: `any`
 
 Default: `[]`
+
+==== [[input_metrics_enabled]] <<input_metrics_enabled,metrics_enabled>>
+
+Description: Flag to deploy a podMonitor resource.
+
+Type: `bool`
+
+Default: `false`
+
+==== [[input_namespace]] <<input_namespace,namespace>>
+
+Description: Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
+
+Type: `string`
+
+Default: `"azure-workload-identity"`
 
 ==== [[input_target_revision]] <<input_target_revision,target_revision>>
 
@@ -205,11 +219,11 @@ object({
 |n/a
 |yes
 
-|[[input_cluster_name]] <<input_cluster_name,cluster_name>>
-|Name given to the cluster. Value used for naming some the resources created by the module.
+|[[input_azure_tenant_id]] <<input_azure_tenant_id,azure_tenant_id>>
+|Azure tenant ID to configure workload identity webhook.
 |`string`
-|`"cluster"`
-|no
+|n/a
+|yes
 
 |[[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
 |IDs of the other modules on which this module depends on.
@@ -221,6 +235,18 @@ object({
 |Helm chart value overrides. They should be passed as a list of HCL structures.
 |`any`
 |`[]`
+|no
+
+|[[input_metrics_enabled]] <<input_metrics_enabled,metrics_enabled>>
+|Flag to deploy a podMonitor resource.
+|`bool`
+|`false`
+|no
+
+|[[input_namespace]] <<input_namespace,namespace>>
+|Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
+|`string`
+|`"azure-workload-identity"`
 |no
 
 |[[input_target_revision]] <<input_target_revision,target_revision>>
