@@ -2,10 +2,10 @@
 ## Standard variables
 #######################
 
-variable "cluster_name" {
-  description = "Name given to the cluster. Value used for naming some the resources created by the module."
+variable "namespace" {
+  description = "Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist."
   type        = string
-  default     = "cluster"
+  default     = "azure-workload-identity"
 }
 
 variable "argocd_namespace" {
@@ -48,3 +48,14 @@ variable "dependency_ids" {
 #######################
 ## Module variables
 #######################
+
+variable "azure_tenant_id" {
+  description = "Azure tenant ID to configure workload identity webhook."
+  type        = string
+}
+
+variable "metrics_enabled" {
+  description = "Flag to deploy a podMonitor resource."
+  type        = bool
+  default     = false
+}

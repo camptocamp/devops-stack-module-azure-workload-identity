@@ -4,7 +4,7 @@ resource "null_resource" "dependencies" {
 
 resource "argocd_project" "this" {
   metadata {
-    name      = "<CHART_NAME>"
+    name      = "azure-workload-identity"
     namespace = var.argocd_namespace
     annotations = {
       "devops-stack.io/argocd_namespace" = var.argocd_namespace
@@ -12,12 +12,12 @@ resource "argocd_project" "this" {
   }
 
   spec {
-    description  = "<CHART_NAME> application project"
-    source_repos = ["https://github.com/camptocamp/devops-stack-module-<CHART_NAME>.git"]
+    description  = "azure-workload-identity application project"
+    source_repos = ["https://github.com/camptocamp/devops-stack-module-azure-workload-identity.git"]
 
     destination {
       name      = "in-cluster"
-      namespace = "kube-system"
+      namespace = var.namespace
     }
 
     orphaned_resources {
@@ -37,7 +37,7 @@ data "utils_deep_merge_yaml" "values" {
 
 resource "argocd_application" "this" {
   metadata {
-    name      = "<CHART_NAME>"
+    name      = "azure-workload-identity"
     namespace = var.argocd_namespace
   }
 
@@ -52,8 +52,8 @@ resource "argocd_application" "this" {
     project = argocd_project.this.metadata.0.name
 
     source {
-      repo_url        = "https://github.com/camptocamp/devops-stack-module-<CHART_NAME>.git"
-      path            = "charts/<CHART_NAME>"
+      repo_url        = "https://github.com/camptocamp/devops-stack-module-azure-workload-identity.git"
+      path            = "charts/azure-workload-identity"
       target_revision = var.target_revision
       helm {
         values = data.utils_deep_merge_yaml.values.output
@@ -62,7 +62,7 @@ resource "argocd_application" "this" {
 
     destination {
       name      = "in-cluster"
-      namespace = "kube-system"
+      namespace = var.namespace
     }
 
     sync_policy {
