@@ -36,11 +36,11 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_utils]] <<provider_utils,utils>> (>= 1)
+- [[provider_null]] <<provider_null,null>>
 
 - [[provider_argocd]] <<provider_argocd,argocd>> (>= 4)
 
-- [[provider_null]] <<provider_null,null>>
+- [[provider_utils]] <<provider_utils,utils>> (>= 1)
 
 === Resources
 
