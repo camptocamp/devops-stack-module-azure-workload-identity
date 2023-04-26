@@ -36,11 +36,11 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
+- [[provider_utils]] <<provider_utils,utils>> (>= 1)
+
 - [[provider_argocd]] <<provider_argocd,argocd>> (>= 4)
 
 - [[provider_null]] <<provider_null,null>>
-
-- [[provider_utils]] <<provider_utils,utils>> (>= 1)
 
 === Resources
 
@@ -71,6 +71,30 @@ Type: `string`
 === Optional Inputs
 
 The following input variables are optional (have default values):
+
+==== [[input_namespace]] <<input_namespace,namespace>>
+
+Description: Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
+
+Type: `string`
+
+Default: `"azure-workload-identity"`
+
+==== [[input_target_revision]] <<input_target_revision,target_revision>>
+
+Description: Override of target revision of the application chart.
+
+Type: `string`
+
+Default: `"v1.0.0"`
+
+==== [[input_helm_values]] <<input_helm_values,helm_values>>
+
+Description: Helm chart value overrides. They should be passed as a list of HCL structures.
+
+Type: `any`
+
+Default: `[]`
 
 ==== [[input_app_autosync]] <<input_app_autosync,app_autosync>>
 
@@ -104,14 +128,6 @@ Type: `map(string)`
 
 Default: `{}`
 
-==== [[input_helm_values]] <<input_helm_values,helm_values>>
-
-Description: Helm chart value overrides. They should be passed as a list of HCL structures.
-
-Type: `any`
-
-Default: `[]`
-
 ==== [[input_metrics_enabled]] <<input_metrics_enabled,metrics_enabled>>
 
 Description: Flag to deploy a podMonitor resource.
@@ -119,22 +135,6 @@ Description: Flag to deploy a podMonitor resource.
 Type: `bool`
 
 Default: `false`
-
-==== [[input_namespace]] <<input_namespace,namespace>>
-
-Description: Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
-
-Type: `string`
-
-Default: `"azure-workload-identity"`
-
-==== [[input_target_revision]] <<input_target_revision,target_revision>>
-
-Description: Override of target revision of the application chart.
-
-Type: `string`
-
-Default: `"v1.0.0"`
 
 === Outputs
 
@@ -165,8 +165,8 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[provider_argocd]] <<provider_argocd,argocd>> |>= 4
 |[[provider_null]] <<provider_null,null>> |n/a
+|[[provider_argocd]] <<provider_argocd,argocd>> |>= 4
 |[[provider_utils]] <<provider_utils,utils>> |>= 1
 |===
 
@@ -187,6 +187,30 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a,a,a,a",options="header,autowidth"]
 |===
 |Name |Description |Type |Default |Required
+|[[input_namespace]] <<input_namespace,namespace>>
+|Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
+|`string`
+|`"azure-workload-identity"`
+|no
+
+|[[input_argocd_namespace]] <<input_argocd_namespace,argocd_namespace>>
+|Namespace used by Argo CD where the Application and AppProject resources should be created.
+|`string`
+|n/a
+|yes
+
+|[[input_target_revision]] <<input_target_revision,target_revision>>
+|Override of target revision of the application chart.
+|`string`
+|`"v1.0.0"`
+|no
+
+|[[input_helm_values]] <<input_helm_values,helm_values>>
+|Helm chart value overrides. They should be passed as a list of HCL structures.
+|`any`
+|`[]`
+|no
+
 |[[input_app_autosync]] <<input_app_autosync,app_autosync>>
 |Automated sync options for the Argo CD Application resource.
 |
@@ -213,11 +237,11 @@ object({
 
 |no
 
-|[[input_argocd_namespace]] <<input_argocd_namespace,argocd_namespace>>
-|Namespace used by Argo CD where the Application and AppProject resources should be created.
-|`string`
-|n/a
-|yes
+|[[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
+|IDs of the other modules on which this module depends on.
+|`map(string)`
+|`{}`
+|no
 
 |[[input_azure_tenant_id]] <<input_azure_tenant_id,azure_tenant_id>>
 |Azure tenant ID to configure workload identity webhook.
@@ -225,34 +249,10 @@ object({
 |n/a
 |yes
 
-|[[input_dependency_ids]] <<input_dependency_ids,dependency_ids>>
-|IDs of the other modules on which this module depends on.
-|`map(string)`
-|`{}`
-|no
-
-|[[input_helm_values]] <<input_helm_values,helm_values>>
-|Helm chart value overrides. They should be passed as a list of HCL structures.
-|`any`
-|`[]`
-|no
-
 |[[input_metrics_enabled]] <<input_metrics_enabled,metrics_enabled>>
 |Flag to deploy a podMonitor resource.
 |`bool`
 |`false`
-|no
-
-|[[input_namespace]] <<input_namespace,namespace>>
-|Namespace where the applications's Kubernetes resources should be created. Namespace will be created in case it doesn't exist.
-|`string`
-|`"azure-workload-identity"`
-|no
-
-|[[input_target_revision]] <<input_target_revision,target_revision>>
-|Override of target revision of the application chart.
-|`string`
-|`"v1.0.0"`
 |no
 
 |===
