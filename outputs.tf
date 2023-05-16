@@ -10,7 +10,7 @@ output "helm_values" {
 
 output "azure_identities" {
   description = "Azure User Assigned Identities created"
-  value = { for v in var.azure_identities :
+  value = { for v in var.workload_identities :
     format("%s.%s", v.namespace, v.name) => {
       name         = v.name
       namespace    = v.namespace
@@ -18,4 +18,5 @@ output "azure_identities" {
       client_id    = azurerm_user_assigned_identity.this[format("%s.%s", v.namespace, v.name)].client_id
       principal_id = azurerm_user_assigned_identity.this[format("%s.%s", v.namespace, v.name)].principal_id
     }
+  }
 }
