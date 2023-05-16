@@ -23,7 +23,7 @@ resource "azurerm_federated_identity_credential" "this" {
     for k, v in var.workload_identities :
     format("%s.%s", v.namespace, v.name) => v
   }
-  name                = format("%s-%s-%s", each.value.namespace, each.value.name, var.cluster_name)
+  name                = format("%s-%s-%s-wkid", each.value.namespace, each.value.name, var.cluster_name)
   resource_group_name = var.node_resource_group_name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = var.cluster_oidc_issuer_url
