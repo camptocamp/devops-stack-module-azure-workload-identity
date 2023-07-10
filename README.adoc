@@ -28,7 +28,7 @@ module "azure-workload-identity" {
 
 The following requirements are needed by this module:
 
-- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 4)
+- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 5)
 
 - [[requirement_utils]] <<requirement_utils,utils>> (>= 1)
 
@@ -38,9 +38,9 @@ The following providers are used by this module:
 
 - [[provider_null]] <<provider_null,null>>
 
-- [[provider_utils]] <<provider_utils,utils>> (>= 1)
+- [[provider_argocd]] <<provider_argocd,argocd>> (>= 5)
 
-- [[provider_argocd]] <<provider_argocd,argocd>> (>= 4)
+- [[provider_utils]] <<provider_utils,utils>> (>= 1)
 
 === Resources
 
@@ -86,7 +86,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v1.0.0"`
+Default: `"v0.1.0"`
 
 ==== [[input_helm_values]] <<input_helm_values,helm_values>>
 
@@ -156,7 +156,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 4
+|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 5
 |[[requirement_utils]] <<requirement_utils,utils>> |>= 1
 |===
 
@@ -165,9 +165,9 @@ Description: ID to pass other modules in order to refer to this module as a depe
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[provider_utils]] <<provider_utils,utils>> |>= 1
-|[[provider_argocd]] <<provider_argocd,argocd>> |>= 4
 |[[provider_null]] <<provider_null,null>> |n/a
+|[[provider_utils]] <<provider_utils,utils>> |>= 1
+|[[provider_argocd]] <<provider_argocd,argocd>> |>= 5
 |===
 
 = Resources
@@ -202,7 +202,7 @@ Description: ID to pass other modules in order to refer to this module as a depe
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v1.0.0"`
+|`"v0.1.0"`
 |no
 
 |[[input_helm_values]] <<input_helm_values,helm_values>>
