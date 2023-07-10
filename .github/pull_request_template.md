@@ -12,8 +12,4 @@ _In most cases, you can leave out details about how a change has been made. Code
 
 ## Tests executed on which distribution(s)
 
-- [ ] KinD
 - [ ] AKS (Azure)
-- [ ] EKS (AWS)
-- [ ] Scaleway
-- [ ] SKS (Exoscale)
